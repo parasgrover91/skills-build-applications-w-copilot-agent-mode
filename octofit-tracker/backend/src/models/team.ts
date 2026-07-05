@@ -1,0 +1,15 @@
+import mongoose, { Document, Schema } from "mongoose";
+
+export interface ITeam extends Document {
+  name: string;
+  members: mongoose.Types.ObjectId[];
+  score: number;
+}
+
+const TeamSchema = new Schema<ITeam>({
+  name: { type: String, required: true },
+  members: [{ type: Schema.Types.ObjectId, ref: "User" }],
+  score: { type: Number, default: 0 }
+});
+
+export default mongoose.model<ITeam>("Team", TeamSchema);

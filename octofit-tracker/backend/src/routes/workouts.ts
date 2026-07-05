@@ -1,16 +1,19 @@
 import { Router } from "express";
+import Workout from "../models/workout";
 
 const router = Router();
 
 // GET /api/workouts/ - list workouts
 router.get("/", async (_req, res) => {
-  res.json({ data: [], message: "List workouts (not implemented)" });
+  const items = await Workout.find().populate("activities.activity").lean();
+  res.json({ data: items });
 });
 
 // POST /api/workouts/ - create workout
 router.post("/", async (req, res) => {
   const payload = req.body;
-  res.status(201).json({ data: payload, message: "Create workout (not implemented)" });
+  const w = await Workout.create(payload);
+  res.status(201).json({ data: w });
 });
 
 export default router;

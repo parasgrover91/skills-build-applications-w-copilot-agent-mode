@@ -1,16 +1,19 @@
 import { Router } from "express";
+import Activity from "../models/activity";
 
 const router = Router();
 
 // GET /api/activities/ - list activities
 router.get("/", async (_req, res) => {
-  res.json({ data: [], message: "List activities (not implemented)" });
+  const items = await Activity.find().lean();
+  res.json({ data: items });
 });
 
 // POST /api/activities/ - create activity
 router.post("/", async (req, res) => {
   const payload = req.body;
-  res.status(201).json({ data: payload, message: "Create activity (not implemented)" });
+  const act = await Activity.create(payload);
+  res.status(201).json({ data: act });
 });
 
 export default router;

@@ -6,7 +6,10 @@
     "outDir": "dist",
     "strict": true,
     "esModuleInterop": true,
+    "moduleResolution": "node",
+    "types": ["node"],
     "skipLibCheck": true,
+    "ignoreDeprecations": "6.0",
     "forceConsistentCasingInFileNames": true
   }
 }

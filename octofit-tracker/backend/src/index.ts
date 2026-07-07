@@ -12,15 +12,15 @@ const MONGO_URL = process.env.MONGO_URL || "mongodb://localhost:27017/octofit_db
 
 // Codespaces-aware API URL (used for console output and optional CORS)
 const CODESPACE_NAME = process.env.CODESPACE_NAME;
-const CODESPACE_URL = CODESPACE_NAME
-  ? `https://${CODESPACE_NAME}-8000.githubpreview.dev`
-  : undefined;
+const API_BASE_URL = CODESPACE_NAME
+  ? `https://${CODESPACE_NAME}-8000.app.github.dev`
+  : "http://localhost:8000";
 
 app.use(express.json());
 
 // Simple CORS middleware that allows the frontend origin and Codespaces preview URL
 const allowedOrigins = ["http://localhost:5173"];
-if (CODESPACE_URL) allowedOrigins.push(CODESPACE_URL);
+if (CODESPACE_NAME) allowedOrigins.push(API_BASE_URL);
 
 app.use((req, res, next) => {
   const origin = req.headers.origin as string | undefined;
@@ -35,7 +35,7 @@ app.use((req, res, next) => {
 });
 
 app.get("/", (_req, res) => {
-  res.json({ status: "ok", service: "octofit-backend", port: PORT, codespace_url: CODESPACE_URL || null });
+  res.json({ status: "ok", service: "octofit-backend", port: PORT, api_base_url: API_BASE_URL });
 });
 
 // Mount logic-tier routers
@@ -51,7 +51,7 @@ async function start() {
     console.log("Connected to MongoDB", MONGO_URL);
     app.listen(PORT, () => {
       console.log(`Server listening on port ${PORT}`);
-      if (CODESPACE_URL) console.log(`Codespaces preview URL: ${CODESPACE_URL}`);
+      console.log(`API base URL: ${API_BASE_URL}`);
     });
   } catch (err) {
     console.error("Failed to start server:", err);
